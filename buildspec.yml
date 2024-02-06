@@ -1,18 +1,34 @@
+# version: 0.2
+# phases:
+#   install:
+#     commands:
+#       # Install all dependencies (including dependencies for running tests)
+#       - npm install
+#   pre_build:
+#     commands:
+#       # Discover and run unit tests in the '__tests__' directory
+#       # - npm run test
+#       # Remove all dependencies not needed for the Lambda deployment package (the packages from devDependencies in package.json)
+#       - npm prune --production
+#   build:
+#     commands:
+#       # Use AWS SAM to package the application by using AWS CloudFormation
+#       - aws cloudformation package --template template.yml
+# #   files:
+# #     - template-export.yml
 version: 0.2
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      # Install all dependencies (including dependencies for running tests)
       - npm install
-  pre_build:
-    commands:
-      # Discover and run unit tests in the '__tests__' directory
-      # - npm run test
-      # Remove all dependencies not needed for the Lambda deployment package (the packages from devDependencies in package.json)
-      - npm prune --production
   build:
     commands:
-      # Use AWS SAM to package the application by using AWS CloudFormation
-      - aws cloudformation package --template template.yml
-#   files:
-#     - template-export.yml
+      - npm run build
+artifacts:
+  files:
+    - 'dist/**/*'
+    - 'node_modules**/*'
+    - 'package.json'
+    - 'package-lock.json'
